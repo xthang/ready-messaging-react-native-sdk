@@ -1,0 +1,44 @@
+{
+  "root": true,
+  "extends": ["@react-native-community", "prettier", "plugin:import/typescript"],
+  "plugins": ["react", "react-native", "@typescript-eslint", "prettier", "import"],
+  "rules": {
+    "@typescript-eslint/no-unused-vars": ["warn"],
+    "@typescript-eslint/no-explicit-any": 0,
+
+    "no-unused-vars": 0,
+
+    "import/no-unused-modules": ["warn", { "unusedExports": true }],
+    "import/no-cycle": "off",
+    "import/order": [
+      "warn",
+      {
+        "alphabetize": {
+          "caseInsensitive": true,
+          "order": "asc"
+        },
+        "groups": ["builtin", "external", "internal", "parent", "sibling", "index"], // default: "builtin", "external", "parent", "sibling", "index"
+        "pathGroups": [
+          {
+            "group": "external",
+            "pattern": "react*{,/**}",
+            "position": "before"
+          },
+          {
+            "group": "external",
+            "pattern": "@signalapp/*{,/**}",
+            "position": "after"
+          },
+          {
+            "group": "object",
+            "pattern": "**/*.scss",
+            "position": "after"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": []
+        // 'newlines-between': 'always',
+        // warnOnUnassignedImports: true,
+      }
+    ]
+  }
+}
