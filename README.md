@@ -1,0 +1,1 @@
+# ready-messaging-react-native-sdk
