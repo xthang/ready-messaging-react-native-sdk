@@ -1,5 +1,5 @@
 import { SendChatMessageData, SendPublicGroupMessageData } from './requests/chat'
-import { SendChatMessageResult, SendPublicChatMessageResult, EmtpyResult } from './responses'
+import { SendChatMessageResult, SendPublicChatMessageResult, EmptyResult } from './responses'
 
 export type GeneralApiProblem =
   /**
@@ -96,7 +96,7 @@ export class ApiError extends Error {
 export type ServerApi = {
   sendMessage: (payload: SendChatMessageData, destination: string) => Promise<SendChatMessageResult>
   sendPublicGroupMessage: (payload: SendPublicGroupMessageData) => Promise<SendPublicChatMessageResult>
-  deletePublicGroupMessage: (groupId: string, guid: string) => Promise<EmtpyResult>
-  deletePublicGroupAttachment: (groupId: string, cloudUrl: string) => Promise<EmtpyResult>
-  reactMessagePublicGroup: (groupId: string, guid: string, reaction: string) => Promise<EmtpyResult>
+  deletePublicGroupMessage: (groupId: string, guid: string) => Promise<EmptyResult>
+  deletePublicGroupAttachment: (groupId: string, cloudUrl: string) => Promise<EmptyResult>
+  reactMessagePublicGroup: (groupId: string, guid: string, reaction: string) => Promise<EmptyResult>
 }

@@ -295,7 +295,7 @@ async function updateMessageWithSuccessfulSends(
     if (!isPublic) {
       attachments.forEach((a) => {
         if (a.localUrl) {
-          window.utils.deleteFile(window.config.BASE_FILE_PATH + a.localUrl)
+          window.Ready.utils.deleteFile(window.Ready.config.BASE_FILE_PATH + a.localUrl)
         }
         window.Ready.Data.deleteAttachment(a.id)
       })
@@ -346,7 +346,7 @@ async function updateMessageWithSuccessfulSends(
     if (!isPublic) {
       message.get('attachments')?.forEach((a) => {
         if (a.localUrl) {
-          window.utils.deleteFile(window.config.BASE_FILE_PATH + a.localUrl)
+          window.Ready.utils.deleteFile(window.Ready.config.BASE_FILE_PATH + a.localUrl)
         }
         window.Ready.Data.deleteAttachment(a.id)
       })

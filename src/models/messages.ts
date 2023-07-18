@@ -1498,7 +1498,7 @@ export abstract class MessageModel extends Backbone.Model<MessageDBType> {
   }
 
   async sendSyncMessage(): Promise<CallbackResultType | void> {
-    const ourAccount = window.utils.getCurrentAccount()
+    const ourAccount = window.Ready.utils.getCurrentAccount()
     const ourConversation = await window.Ready.conversationController.getOurConversationOrThrow(ourAccount)
     const sendOptions: SendOptionsType = { online: false } // await getSendOptions(ourConversation.attributes, {
     //   syncMessage: true,
@@ -1634,7 +1634,7 @@ export abstract class MessageModel extends Backbone.Model<MessageDBType> {
     if (isPublic) {
       recipientConversationIds = [conversation.id]
     } else {
-      const ourAccount = window.utils.getCurrentAccount()
+      const ourAccount = window.Ready.utils.getCurrentAccount()
       const ourConversation = await window.Ready.conversationController.getOurConversationOrThrow(ourAccount)
       recipientConversationIds = Array.from(conversation.getMemberConversationIds()).concat([ourConversation.id])
     }
@@ -2721,7 +2721,7 @@ export abstract class MessageModel extends Backbone.Model<MessageDBType> {
           await window.Ready.Data.deleteAttachmentByCloudUrl(conversation.id, attachment.cloudUrl)
           const att = this.attributes.attachments?.find((a) => a.cloudUrl === attachment.cloudUrl)
           if (att?.localUrl) {
-            window.utils.deleteFile(window.config.BASE_FILE_PATH + att.localUrl)
+            window.Ready.utils.deleteFile(window.Ready.config.BASE_FILE_PATH + att.localUrl)
           }
         })
       )
@@ -2743,7 +2743,7 @@ export abstract class MessageModel extends Backbone.Model<MessageDBType> {
             // deleted.attachments.push(attachment as { cloudUrl: string })
             await window.Ready.Data.deleteAttachment(attachment.id)
             if (attachment.localUrl) {
-              window.utils.deleteFile(window.config.BASE_FILE_PATH + attachment.localUrl)
+              window.Ready.utils.deleteFile(window.Ready.config.BASE_FILE_PATH + attachment.localUrl)
             }
           })
         )

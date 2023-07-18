@@ -31,7 +31,7 @@ export class ReadyAddress {
   }
 
   public static lookup(identifier: string): ReadyAddress | undefined {
-    const account = window.utils.getCurrentAccount()
+    const account = window.Ready.utils.getCurrentAccount()
     const conversation = window.Ready.conversationController.getByIdentifier(account.id, identifier)
     const identifier_ = conversation?.get('identifier')
     if (identifier_ === undefined) {

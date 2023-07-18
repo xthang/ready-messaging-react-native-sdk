@@ -93,7 +93,7 @@ export function shouldSaveProto(sendType: SendTypesType): boolean {
 }
 
 async function processError(error: unknown): Promise<void> {
-  const ourAccountId = window.utils.getCurrentAccount().id
+  const ourAccountId = window.Ready.utils.getCurrentAccount().id
 
   if (error instanceof OutgoingMessageError || error instanceof SendMessageNetworkError) {
     const conversation = await window.Ready.conversationController.getOrCreate(

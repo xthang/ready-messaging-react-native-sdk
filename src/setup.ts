@@ -7,14 +7,14 @@ import { ConversationCollection } from 'models/conversations'
 import { SignalProtocolStore } from 'SignalProtocolStore'
 import MessageReceiver from 'textsecure/MessageReceiver'
 
-window.utils = {} as any
-
 window.Whisper = {} as any
 window.Whisper.events = clone(Backbone.Events)
 
 window.Ready = {} as any
 
 window.Ready.types = {} as any
+window.Ready.utils = {} as any
+window.Ready.api = {} as any
 
 window.Ready.Data = db
 
@@ -29,5 +29,3 @@ window.Ready.messageController.startCleanupInterval()
 
 const messageReceiver = new MessageReceiver({ protocol: window.Ready.protocol })
 window.Ready.messageReceiver = messageReceiver
-
-window.Ready.api = {} as any

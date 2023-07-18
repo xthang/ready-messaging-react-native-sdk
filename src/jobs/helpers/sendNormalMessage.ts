@@ -4,15 +4,15 @@ import type { CreateAttachmentParams } from 'db/types'
 import { generateGroupAttachmentId } from 'helpers'
 import { getMessageById } from 'messages/getMessageById'
 import { isSent } from 'messages/MessageSendStatus'
+import type { ConversationModel } from 'models/conversations'
 import { MessageModel } from 'models/messages'
 import { type CallbackResultType } from 'textsecure/Types.d'
 import { type AttachmentDBType, type AttachmentMetadata, AttachmentType, ConversationType, GroupType } from 'types/chat'
+import * as Errors from 'types/errors'
 import { type UUIDStringType } from 'types/UUID'
 import { handleMessageSend } from 'utils/handleMessageSend'
 import { logger, type LoggerType } from 'utils/logger'
 import { isDirectConversation, isGroup, isMe, isPublicGroup } from 'utils/whatTypeOfConversation'
-import type { ConversationModel } from '../../models/conversations'
-import * as Errors from '../../types/errors'
 import type { ConversationQueueJobBundle, NormalMessageSendJobData } from '../conversationJobQueue'
 import { handleMultipleSendErrors } from './handleMultipleSendErrors'
 
@@ -411,7 +411,7 @@ async function uploadAttachments(message: MessageModel): Promise<void> {
         if (!isPublicGroup(conversation.attributes)) {
           logger.log('--  sendNormalMessage with QUOTE: targeted conversation is DIRECT')
 
-          const { isSuccess, data } = await window.utils.startDownloadProcess({
+          const { isSuccess, data } = await window.Ready.utils.startDownloadProcess({
             accountId: conversation.get('accountId')!,
             uri: attachment.cloudUrl!,
             attachmentId,
@@ -431,15 +431,15 @@ async function uploadAttachments(message: MessageModel): Promise<void> {
           const folderPath = `/${conversation.get('accountId')}/chat/${conversation.id}`
           const encryptedLocalPath = `${folderPath}/encrypted-${attachment.name}`
 
-          const encKey = await window.utils.encryptFile({
-            inputRri: window.config.BASE_FILE_PATH + data.localPath,
-            outputUri: window.config.BASE_FILE_PATH + encryptedLocalPath,
+          const encKey = await window.Ready.utils.encryptFile({
+            inputRri: window.Ready.config.BASE_FILE_PATH + data.localPath,
+            outputUri: window.Ready.config.BASE_FILE_PATH + encryptedLocalPath,
           })
 
-          const uploadUri = window.config.BASE_FILE_PATH + encryptedLocalPath
+          const uploadUri = window.Ready.config.BASE_FILE_PATH + encryptedLocalPath
 
           // uploadfile
-          const res = await window.utils.uploadFile({
+          const res = await window.Ready.utils.uploadFile({
             uri: uploadUri,
             fileName: attachment.name,
           })
@@ -464,10 +464,10 @@ async function uploadAttachments(message: MessageModel): Promise<void> {
             // Forward from saved message screen
             uploadUri = attachment.localUrl
           } else {
-            uploadUri = window.config.BASE_FILE_PATH + attachment.localUrl
+            uploadUri = window.Ready.config.BASE_FILE_PATH + attachment.localUrl
           }
 
-          const res = await window.utils.uploadFile({
+          const res = await window.Ready.utils.uploadFile({
             uri: uploadUri,
             fileName: attachment.name,
             groupId: conversation.get('identifier'),
@@ -578,7 +578,7 @@ async function uploadSingleAttachment(message: MessageModel, attachment: Attachm
   const uploadMetadata = await getFileMetadata(attachment, type)
 
   // Upload
-  const { isSuccess, data } = await window.utils.startUploadProcess({
+  const { isSuccess, data } = await window.Ready.utils.startUploadProcess({
     uri,
     attachmentId: attachment.id,
     messageId: message.id,

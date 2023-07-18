@@ -15,7 +15,7 @@ export async function queueAttachmentDownloads(
       message.attachments!.map(async (attachment) => {
         if (attachment.secure) {
           const result = await downloadQueue.add(() =>
-            window.utils.downloadAttachment({
+            window.Ready.utils.downloadAttachment({
               attachmentId: attachment.id,
               conversationId: message.conversationId,
               spaceId: attachment.cloudUrl!,

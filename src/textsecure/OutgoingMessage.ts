@@ -11,7 +11,7 @@ import {
 
 import { ApiError, ServerApi } from 'types/api'
 import { ApiMessageData, SendChatMessageData, SendPublicGroupMessageData } from 'types/api/requests/chat'
-import { EmtpyResult, SendChatMessageResult, SendPublicChatMessageResult } from 'types/api/responses'
+import { EmptyResult, SendChatMessageResult, SendPublicChatMessageResult } from 'types/api/responses'
 import { MessageContentType, mapMessageToContentType, type MessageDataV2, type DataMessage } from 'types/chat'
 import { SocketEnvelopType } from 'types/socket'
 import * as Utils from 'utils/crypto/utils'
@@ -469,7 +469,7 @@ export default class OutgoingMessage {
 
     try {
       if (dataMessage.deleted) {
-        let res: EmtpyResult
+        let res: EmptyResult
         if (!dataMessage.deleted.attachments) {
           res = await this.server.deletePublicGroupMessage(identifier, dataMessage.deleted.guid)
         } else {

@@ -82,7 +82,7 @@ import MessageSender from 'textsecure/MessageSender'
 import { ServerApi, getGeneralApiProblem } from 'types/api'
 import { SendChatMessageData, SendPublicGroupMessageData } from 'types/api/requests/chat'
 import {
-  EmtpyResult,
+  EmptyResult,
   GetChatKeyBundleResult,
   SendChatMessageResult,
   SendPublicChatMessageResult,
@@ -133,6 +133,7 @@ window.Ready.api.getKeyBundle = async (address: string, deviceId?: number): Prom
 // ----------------------------------------
 
 const api: ServerApi = {
+  // send message to a private conversation
   sendMessage: async (payload: SendChatMessageData, destination: string): Promise<SendChatMessageResult> => {
     const response = await fetch(`https://api.ready.io/chat/v2/messages/${destination}`, {
       method: 'put',
@@ -151,6 +152,10 @@ const api: ServerApi = {
     return { kind: 'ok', data }
   },
 
+  // send message/action to a private group
+  // TODO
+
+  // send message/action to a public group
   sendPublicGroupMessage: async (payload: SendPublicGroupMessageData): Promise<SendPublicChatMessageResult> => {
     const response = await fetch('https://api.ready.io/chat/v2/messages/groups_chat/public', {
       method: 'put',
@@ -168,13 +173,13 @@ const api: ServerApi = {
     const data = await response.json()
     return { kind: 'ok', data }
   },
-  deletePublicGroupMessage: function (groupId: string, guid: string): Promise<EmtpyResult> {
+  deletePublicGroupMessage: function (groupId: string, guid: string): Promise<EmptyResult> {
     throw new Error('Function not implemented.')
   },
-  deletePublicGroupAttachment: function (groupId: string, cloudUrl: string): Promise<EmtpyResult> {
+  deletePublicGroupAttachment: function (groupId: string, cloudUrl: string): Promise<EmptyResult> {
     throw new Error('Function not implemented.')
   },
-  reactMessagePublicGroup: function (groupId: string, guid: string, reaction: string): Promise<EmtpyResult> {
+  reactMessagePublicGroup: function (groupId: string, guid: string, reaction: string): Promise<EmptyResult> {
     throw new Error('Function not implemented.')
   },
 }
@@ -203,7 +208,7 @@ const privateKey2 = 'ba2adbec50e36bbdfbb1c6e5fa10995658043070a8d9e86b523bcc54f4a
 describe('test', () => {
   let accountId: string
 
-  it('account', async () => {
+  beforeAll(async () => {
     const keyPair = await createKeyPair(Utils.fromHexToArray(privateKey).buffer)
 
     accountId = await window.Ready.Data.createAccount({
@@ -234,10 +239,15 @@ describe('test', () => {
 
     window.Ready.protocol.hydrateCaches()
 
-    window.utils.getCurrentAccount = () => ({
+    window.Ready.utils.getCurrentAccount = () => ({
       id: accountId,
       address: accountAddress,
     })
+  })
+
+  afterAll(async () => {
+    window.Ready.messageController.stopCleanupInterval()
+    console.debug('--  test ended')
   })
 
   test('send to public group', async () => {
@@ -261,11 +271,13 @@ describe('test', () => {
       ConversationType.PRIVATE,
       undefined
     )
+
     const msg = await conversation.enqueueMessageForSend({
       contentType: MessageType.MESSAGE,
       body: 'jest test text out',
     })
-    // await conversation.sendTypingMessage(true)
+
+    await conversation.sendTypingMessage(true)
 
     await sleep(4000)
   }, 7000)
@@ -290,7 +302,7 @@ describe('test', () => {
     )
 
     window.Ready.messageReceiver.handleNewMessage({
-      account: window.utils.getCurrentAccount(),
+      account: window.Ready.utils.getCurrentAccount(),
       envelope: {
         source: account2Address,
         source_device: 1,
@@ -313,6 +325,4 @@ describe('test', () => {
 
     await sleep(1000)
   })
-
-  window.Ready.messageController.stopCleanupInterval()
 })

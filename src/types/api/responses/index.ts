@@ -7,4 +7,4 @@ export * from './chat'
 // export * from './wallet'
 // export * from './beta'
 
-export type EmtpyResult = { kind: 'ok' } | GeneralApiProblem
+export type EmptyResult = { kind: 'ok' } | GeneralApiProblem

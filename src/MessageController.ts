@@ -97,7 +97,7 @@ export class MessageController {
       const { message, timestamp } = messages[i]!
       const conversation = message.getConversation()
 
-      const selectedConversationId = window.utils.getCurrentConversationId()
+      const selectedConversationId = window.Ready.utils.getCurrentConversationId()
       const inActiveConversation = conversation && selectedConversationId && conversation.id === selectedConversationId
 
       if (now - timestamp > FIVE_MINUTES && !inActiveConversation) {

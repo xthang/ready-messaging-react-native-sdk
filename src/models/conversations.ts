@@ -4004,7 +4004,7 @@ export abstract class ConversationModel extends Backbone.Model<ConversationDBTyp
       return
     }
 
-    const ourAccount = window.utils.getCurrentAccount()
+    const ourAccount = window.Ready.utils.getCurrentAccount()
     const isPublicConversation = this.get('groupType') === GroupType.PUBLIC
     const now = timestamp || Date.now()
 
